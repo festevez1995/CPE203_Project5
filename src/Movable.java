@@ -22,7 +22,7 @@ public abstract class Movable extends AnimatedEntity {
         if (nextPoints.size() == 0) {
             return getPosition();
         }
-        return nextPoints.get(0);
+        return nextPoints.get(1);
     }
 
     @Override
