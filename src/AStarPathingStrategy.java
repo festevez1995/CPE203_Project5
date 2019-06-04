@@ -7,75 +7,91 @@ import java.util.stream.Stream;
 
 class AStarPathingStrategy
         implements PathingStrategy {
-    public List<Point> computePath(Point start, Point end, Predicate<Point> canPassThrough, BiPredicate<Point, Point> withinReach,
+    public static int heurestic(Point current, Point goal) {
+        return current.distanceSquared(goal);
+    }
+
+    public List<Point> computePath(Point start, Point end,
+                                   Predicate<Point> canPassThrough,
+                                   BiPredicate<Point, Point> withinReach,
                                    Function<Point, Stream<Point>> potentialNeighbors) {
         List<Point> path = new LinkedList<>();
-        PriorityQueue<Node> openList = new PriorityQueue<>(Comparator.comparing(Node::getF));
-        HashMap<Point, Node> openListMap = new HashMap<>();
-        HashMap<Point, Node> closedList = new HashMap<>();
-        HashMap<Point, Node> camefrom = new HashMap<>();
+        ArrayList<Node> closedList = new ArrayList<>();
+        ArrayList<Node> openList = new ArrayList<>();
+        /*top node*/
+        Node top_node = new Node(start, 0, heurestic(start, end), null);
+        Node curr_node = top_node;
+        openList.add(top_node);
 
-        Node last = null;
-        Node beginning = new Node(start, 0, heurestic(start, end), null); // starting node
-        openList.add(beginning);// adds the start to openList
 
-        while (!openList.isEmpty()) {
-
-            Node current = openList.poll();//smallest F value is set to the current Node
-
-            //checks to see if we are in reach of the end goal
-            if (withinReach.test(current.position(), end)) {
-                path.add(current.position());
-                return buildPath(camefrom, current);
-            }
-
-            //retrives all neighbors for current node
-            List<Point> neighbors = potentialNeighbors.apply(current.position()).filter(canPassThrough)
+        while (!curr_node.getPos().adjacent(end) && closedList.size() < 250) {
+            List<Point> neighbors = potentialNeighbors.apply(curr_node.getPos())
+                    .filter(canPassThrough)
                     .filter(p -> !p.equals(start) && !p.equals(end)).collect(Collectors.toList());
 
-            //Analyzes all adjacent nodes that are not in the closed List
-            for (Point neighborPoint : neighbors) {
-
-                Node nextNode = new Node(neighborPoint, current.getG() + 1, heurestic(neighborPoint, end), current);
-                if (!closedList.containsKey(neighborPoint)) {// checks to see if we havent all ready evealuated the node
-                    //checks to see if point is all ready in the open list
-                    //checks to see if the new g is better than the one all ready in the openlist
-                    if (openListMap.containsKey(neighborPoint) && (current.getG() + 1) <= openListMap.get(neighborPoint).getG()) {
-                        Node newNode = new Node(openListMap.get(neighborPoint).position(), current.getG() + 1,
-                                openListMap.get(neighborPoint).getH(), current);
-
-                        openList.remove(openListMap.get(neighborPoint).position());
-                        openList.add(newNode);
-                        openListMap.replace(neighborPoint, newNode);
-                    }
-                    camefrom.put(neighborPoint, nextNode);
-                    openList.add(nextNode);
-                    openListMap.put(neighborPoint, nextNode);
-                }
+            ArrayList<Node> neighborNodes = new ArrayList<>();
+            int temp_g = curr_node.getG() + 1;
+            for (Point p : neighbors) {
+                neighborNodes.add(new Node(p, temp_g, heurestic(p, end), curr_node));
             }
 
-            last = current;
-            closedList.put(current.position(), current);// current node is added to closed list
-            openListMap.remove(current.position());
+            for (Node neighborN : neighborNodes) {
+                if (!checkList(closedList, neighborN)) {
+                    if (!checkList(openList, neighborN)) {
+                        openList.add(neighborN);
+                    }
+                    int temp_n = heurestic(neighborN.getPos(), end);
+                    for (Node betterNode : openList) {
+                        if (betterNode.getPos().equals(neighborN.getPos())) {
+                            if (neighborN.getG() < betterNode.getG()) {
+                                betterNode.setG(neighborN.getG());
+                                betterNode.setH(temp_n);
+                                betterNode.setF(neighborN.getG() + temp_n);
+                                neighborN.setPrev(curr_node);
+                            }
+                        }
+                    }
 
+                }
+
+            }
+            /*update lists*/
+            openList.remove(curr_node);
+            closedList.add(curr_node);
+            Node fastF = new Node(curr_node.getPos(), 0, 0, curr_node.getPrev());
+            fastF.setF(9999999);//make it big as all squares to start finding small path
+            for (Node curOL : openList) {
+                if (curOL.getF() < fastF.getF()) {
+                    fastF = curOL;
+                }
+            }
+            curr_node = fastF;
         }
-        return buildPath(camefrom, last);
+        if (!curr_node.getPos().adjacent(end)) {
+            return Collections.emptyList();
+        }
+        while (!curr_node.getPos().equals(start)) {
+            return computedPath(path, curr_node);
+        }
+        return path;
+
     }
 
-    public int heurestic(Point p, Point end) {
-        return Math.abs(end.x - p.x) + Math.abs(end.y - p.y);
+    public List<Point> computedPath(List<Point> compPath, Node goal) {
+        compPath.add(goal.getPos());
+        if (goal.getPrev() == null) {
+            Collections.reverse(compPath);
+            return compPath;
+        }
+        return computedPath(compPath, goal.getPrev());
     }
 
-    private List<Point> buildPath(Map<Point, Node> camefrom, Node current) {
-        List<Point> totalPath = new ArrayList<>();
-        totalPath.add(current.position());
-        while (camefrom.containsKey(current.getPriorNode().position())) {
-            current = camefrom.get(current.getPriorNode().position());
-            if (current.getPriorNode() == null)
-                return totalPath;
-            totalPath.add(current.position());
+    public boolean checkList(List<Node> nodeList, Node node) {
+        for (Node cur : nodeList) {
+            if (cur.equals(node)) {
+                return true;
+            }
         }
-        Collections.reverse(totalPath);
-        return totalPath;
+        return false;
     }
 }
