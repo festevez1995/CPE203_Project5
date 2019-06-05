@@ -17,6 +17,7 @@ miner images/miner2.bmp 252 252 252 0
 miner images/miner3.bmp 252 252 252 0
 miner images/miner4.bmp 252 252 252 0
 miner images/miner5.bmp 252 252 252 0
+obstacle1 images/snowtree.bmp
 obstacle images/snowtree1.bmp
 ore images/ore.bmp 201 26 26 0
 quake images/quake1.bmp 255 255 255 0
