@@ -41,7 +41,7 @@ public final class VirtualWorld extends PApplet {
     private WorldModel world;
     private WorldView view;
     private EventScheduler scheduler;
-    //private Chaozu player1;
+    private Chaozu player1;
 
     private long next_time;
 
@@ -83,7 +83,7 @@ public final class VirtualWorld extends PApplet {
         loadWorld(world, LOAD_FILE_NAME, imageStore);
 
         scheduleActions(world, scheduler, imageStore);
-
+        player1 = (Chaozu) world.getChaozu();
         next_time = System.currentTimeMillis() + TIMER_ACTION_PERIOD;
     }
 
@@ -116,7 +116,7 @@ public final class VirtualWorld extends PApplet {
                     dx = 1;
                     break;
             }
-            //player1.move(dx, dy);
+            player1.move(dx, dy);
             //view.shiftView(dx, dy);
         }
     }

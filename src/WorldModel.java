@@ -71,6 +71,7 @@ final class WorldModel {
     private Background[][] background;
     private Entity[][] occupancy;
     private Set<Entity> entities;
+    public Entity chaozu;
     //public static final int ORE_REACH = 1;
 
     public WorldModel(int numRows, int numCols, Background defaultBackground) {
@@ -315,10 +316,19 @@ final class WorldModel {
         if (properties.length == CHAOZU_NUM_PROPERTIES) {
             Point p = new Point(Integer.parseInt(properties[CHAOZU_COL]), Integer.parseInt(properties[CHAOZU_ROW]));
             Entity chaozu = Chaozu.createChaozu(properties[CHAOZU_ID], p, imageStore.getImageList(CHAOZU_KEY), Integer.parseInt(properties[CHAOZU_ANIMATION_PERIOD]));
+            setMovableEntity(chaozu);
             tryAddEntity(chaozu);
 
         }
         return properties.length == CHAOZU_NUM_PROPERTIES;
+    }
+
+    public void setMovableEntity(Entity chaozu) {
+        this.chaozu = chaozu;
+    }
+
+    public Entity getChaozu() {
+        return chaozu;
     }
 
     public boolean parseMiner(String[] properties, ImageStore imageStore) {//miner not full
