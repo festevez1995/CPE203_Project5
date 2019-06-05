@@ -27,11 +27,8 @@ final class Point {
         return result;
     }
 
-    public int distanceSquared(Point p2) {
-        int deltaX = this.x - p2.x;
-        int deltaY = this.y - p2.y;
-
-        return deltaX * deltaX + deltaY * deltaY;
+    public static int distanceSquared(Point end, Point p) {
+        return Math.abs(end.x - p.x) + Math.abs(end.y - p.y);
     }
 
     public boolean adjacent(Point p) {

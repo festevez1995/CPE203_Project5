@@ -1,62 +1,50 @@
-public class Node {
-    private Point p;
-    private int g;
-    private int h;
-    private int f;
+/* A-Star */
+class Node {
+    private int f; //total distance, Remember: f=g+h
+    private int g; //distance from start
+    private int h; //heursitc distance
     private Node prev_node;
+    private Point p;
 
-    public Node(Point p, int g, int h, Node prev_node) {
-        this.p = p;
+    public Node (int g, int h, int f, Point p, Node prev_node){
         this.g = g;
         this.h = h;
-        f = g + h;
-        this.prev_node = prev_node;
+        this.f = f;
+        this.p = p;
+        this.prev_node = prev_node; //root
     }
 
-
-    public int getG() {
-        return g;
-    }
-
-    public void setG(int g) {
-        this.g = g;
-    }
-
-    public int getH() {
+    public int getH()
+    {
         return h;
     }
-
-    public void setH(int h) {
-        this.h = h;
-    }
-
-    public int getF() {
+    public int getF()
+    {
         return f;
     }
-
-    public void setF(int f) {
-        this.f = f;
+    public void setG(int g)
+    {
+        this.g = g;
     }
+    public void setH(int h)
+    {
+        this.h = h;
+    }
+    public int getG()
+    {
+        return g;
+    }
+    public void setF(int f) {this.f = f;}
+    public void setPos(Point p)
+    {
+        p = p;
+    }
+    public Point getPos() {return p;}
+    public void setPrev(Node prev_node) {this.prev_node = prev_node;}
 
-    public Node getPrev() {
+    public Node getPrev()
+    {
         return prev_node;
     }
-
-    public void setPrev(Node prev_node) {
-        this.prev_node = prev_node;
-    }
-
-    public Point getPos() {
-        return p;
-    }
-
-    public boolean equals(Node o) {
-        return this.p.equals(o.p);
-    }
-
-    public String toString() {
-        return ("Node x: " + p.x + ", y: " + p.y);
-    }
+    public String toString() {return ("Node x: " + p.x + ", y: " + p.y);}
 }
-
-

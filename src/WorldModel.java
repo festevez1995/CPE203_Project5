@@ -145,17 +145,23 @@ final class WorldModel {
         return nearestEntity(ofType, pos);
     }
 
-    public Optional<Entity> nearestEntity(List<Entity> entities, Point pos) {
-        if (entities.isEmpty()) {
+    public  Optional<Entity> nearestEntity(List<Entity> entities, Point pos)
+    {
+        if (entities.isEmpty())
+        {
             return Optional.empty();
-        } else {
+        }
+        else
+        {
             Entity nearest = entities.get(0);
-            int nearestDistance = pos.distanceSquared(nearest.getPosition());
+            int nearestDistance = Point.distanceSquared(nearest.getPosition(), pos);
 
-            for (Entity other : entities) {
-                int otherDistance = pos.distanceSquared(other.getPosition());
+            for (Entity other : entities)
+            {
+                int otherDistance = Point.distanceSquared(other.getPosition(), pos);
 
-                if (otherDistance < nearestDistance) {
+                if (otherDistance < nearestDistance)
+                {
                     nearest = other;
                     nearestDistance = otherDistance;
                 }
