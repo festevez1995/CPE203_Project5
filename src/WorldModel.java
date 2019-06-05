@@ -28,6 +28,13 @@ final class WorldModel {
     protected static final int MINER_LIMIT = 4;
     protected static final int MINER_ACTION_PERIOD = 5;
     protected static final int MINER_ANIMATION_PERIOD = 6;
+    protected static final String CHAOZU_KEY = "chaozu";
+    protected static final int CHAOZU_NUM_PROPERTIES = 5;
+    protected static final int CHAOZU_ID = 1;
+    protected static final int CHAOZU_COL = 2;
+    protected static final int CHAOZU_ROW = 3;
+    protected static final int CHAOZU_ANIMATION_PERIOD = 4;
+
     protected static final String OBSTACLE_KEY = "obstacle";
     protected static final int OBSTACLE_NUM_PROPERTIES = 4;
     protected static final int OBSTACLE_ID = 1;
@@ -286,6 +293,8 @@ final class WorldModel {
                     return parseSmith(properties, imageStore);
                 case VEIN_KEY:
                     return parseVein(properties, imageStore);
+                case CHAOZU_KEY:
+                    return parseChaozu(properties, imageStore);
             }
         }
 
@@ -302,6 +311,15 @@ final class WorldModel {
         return properties.length == BGND_NUM_PROPERTIES;
     }
 
+    public boolean parseChaozu(String[] properties, ImageStore imageStore) {
+        if (properties.length == CHAOZU_NUM_PROPERTIES) {
+            Point p = new Point(Integer.parseInt(properties[CHAOZU_COL]), Integer.parseInt(properties[CHAOZU_ROW]));
+            Entity chaozu = Chaozu.createChaozu(properties[CHAOZU_ID], p, imageStore.getImageList(CHAOZU_KEY), Integer.parseInt(properties[CHAOZU_ANIMATION_PERIOD]));
+            tryAddEntity(chaozu);
+
+        }
+        return properties.length == CHAOZU_NUM_PROPERTIES;
+    }
 
     public boolean parseMiner(String[] properties, ImageStore imageStore) {//miner not full
         if (properties.length == MINER_NUM_PROPERTIES) {

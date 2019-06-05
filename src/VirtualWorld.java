@@ -33,7 +33,6 @@ public final class VirtualWorld extends PApplet {
     protected static final double FASTER_SCALE = 0.25;
     protected static final double FASTEST_SCALE = 0.10;
 
-    protected static final String CHAOZU_KEY = "chaozu";
 
 
     protected static double timeScale = 1.0;

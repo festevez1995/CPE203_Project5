@@ -33,6 +33,9 @@ public class Activity extends Action {
         } else if (getEntity() instanceof Vein) {
             ((Vein) getEntity()).executeActivity(world, imageStore, scheduler);
 
+        } else if (getEntity() instanceof Chaozu) {
+            ((Chaozu) getEntity()).executeActivity(world, imageStore, scheduler);
+
         } else {
             throw new UnsupportedOperationException(
                     String.format("executeActivityAction not supported for %s", getEntity().getClass()));
