@@ -28,7 +28,6 @@ final class WorldModel {
     protected static final int MINER_LIMIT = 4;
     protected static final int MINER_ACTION_PERIOD = 5;
     protected static final int MINER_ANIMATION_PERIOD = 6;
-    protected static final String CHAOZU_KEY = "chaozu";
     protected static final String OBSTACLE_KEY = "obstacle";
     protected static final int OBSTACLE_NUM_PROPERTIES = 4;
     protected static final int OBSTACLE_ID = 1;
@@ -302,6 +301,7 @@ final class WorldModel {
 
         return properties.length == BGND_NUM_PROPERTIES;
     }
+
 
     public boolean parseMiner(String[] properties, ImageStore imageStore) {//miner not full
         if (properties.length == MINER_NUM_PROPERTIES) {

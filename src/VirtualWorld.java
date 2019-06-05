@@ -9,7 +9,7 @@ public final class VirtualWorld extends PApplet {
     protected static final int TIMER_ACTION_PERIOD = 100;
 
     protected static final int VIEW_WIDTH = 1300;
-    protected static final int VIEW_HEIGHT = 1060;
+    protected static final int VIEW_HEIGHT = 975;
     protected static final int TILE_WIDTH = 32;
     protected static final int TILE_HEIGHT = 32;
     protected static final int WORLD_WIDTH_SCALE = 2;
@@ -33,12 +33,16 @@ public final class VirtualWorld extends PApplet {
     protected static final double FASTER_SCALE = 0.25;
     protected static final double FASTEST_SCALE = 0.10;
 
+    protected static final String CHAOZU_KEY = "chaozu";
+
+
     protected static double timeScale = 1.0;
 
     private ImageStore imageStore;
     private WorldModel world;
     private WorldView view;
     private EventScheduler scheduler;
+    //private Chaozu player1;
 
     private long next_time;
 
@@ -113,7 +117,8 @@ public final class VirtualWorld extends PApplet {
                     dx = 1;
                     break;
             }
-            view.shiftView(dx, dy);
+            //player1.move(dx, dy);
+            //view.shiftView(dx, dy);
         }
     }
 
@@ -133,6 +138,7 @@ public final class VirtualWorld extends PApplet {
 
     private void loadImages(String filename, ImageStore imageStore, PApplet screen) {
         try {
+            //player1 = new Chaozu(CHAOZU_KEY, new Point(4,4), imageStore.getImageList(CHAOZU_KEY));
             Scanner in = new Scanner(new File(filename));
             imageStore.loadImages(in, screen);
         } catch (FileNotFoundException e) {
